@@ -14,6 +14,11 @@ updateAndRenderScene();
 
 
 // --- Functions ---
+function loadFont() {
+
+    return font;
+}
+
 function updateAndRenderScene() {
     requestAnimationFrame(updateAndRenderScene);
     sceneManager.update();

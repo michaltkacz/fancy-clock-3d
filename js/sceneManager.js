@@ -42,7 +42,7 @@ export class SceneManager {
     _buildSceneObjects() {
         const sceneObjects = {
             "light": new AmbientLight(this._scene, 0x404040),
-            "axes": new Axes(this._scene),
+            //"axes": new Axes(this._scene),
             "plane": new Plane(this._scene, 1000, 1000, 0x3b3b3b, -20, 32),
             "clock": new Clock(this._scene)
         };

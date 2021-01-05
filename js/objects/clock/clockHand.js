@@ -7,10 +7,6 @@ export class ClockHand extends THREE.Object3D {
         this._spheres = []
         this._r = radius;
         this._sphereRadius = sphereRadius;
-        // this._numOfSpheres = numOfSpheres;
-        // this._numOfActiveSpheres = numOfActiveSpheres;
-
-
 
         this._materialActive = new THREE.MeshNormalMaterial();
         this._materialInactive = new THREE.MeshLambertMaterial({ color: 0xcccccc });
@@ -53,7 +49,8 @@ export class ClockHand extends THREE.Object3D {
     }
 
     update(time, rotationAngles) {
-        this._activateSpheres(time);
+        if (time !== this._lastTime)
+            this._activateSpheres(time);
         this.rotation.x += rotationAngles.x;
         this.rotation.y += rotationAngles.y;
         this.rotation.z += rotationAngles.z;
