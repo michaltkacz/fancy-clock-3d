@@ -1,8 +1,7 @@
 import * as THREE from '../../../node_modules/three/build/three.module.js';
-// import * as THREEx from '../../../bower_components/threex.dynamictexture/threex.dynamictexture.js';
 
 export class ClockDisplay extends THREE.Object3D {
-    static font;
+    static font = undefined;
     static loadFont() {
         const loader = new THREE.FontLoader();
         loader.load('../../../node_modules/three/examples/fonts/helvetiker_bold.typeface.json', function(response) {
@@ -10,36 +9,44 @@ export class ClockDisplay extends THREE.Object3D {
         });
     }
 
+    static geometryCircle = new THREE.CircleGeometry(4.5, 32);
+    static materialCircle = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
+
+    static geometryTorus = new THREE.TorusGeometry(4.5, 0.5, 16, 100);
+    static materialTorus = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+
+    static materialText = new THREE.MeshNormalMaterial();
+
     constructor(clock, date) {
         super();
         ClockDisplay.loadFont();
         this._lastDate = date;
-        this._mesh1 = null;
-        this._mesh2 = null;
+        this.meshText1 = null;
+        this.meshText2 = null;
 
-        const geometryC = new THREE.CircleGeometry(5, 32);
-        const materialC = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
-        const circle = new THREE.Mesh(geometryC, materialC);
+        const circle = new THREE.Mesh(ClockDisplay.geometryCircle, ClockDisplay.materialCircle);
         this.add(circle);
 
-        const geometryT = new THREE.TorusGeometry(5, 0.5, 16, 100);
-        const materialT = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-        const torus = new THREE.Mesh(geometryT, materialT);
+        const torus = new THREE.Mesh(ClockDisplay.geometryTorus, ClockDisplay.materialTorus);
         this.add(torus);
 
         clock.add(this);
     }
 
     _removeClockDisplayText() {
-        // this.remove(this.getObjectByName("clockDisplayText"));
-        this.remove(this._mesh1);
-        this.remove(this._mesh2);
+        if (this.meshText1 !== null && this.meshText2 !== null) {
+            this.meshText1.geometry.dispose();
+            this.meshText2.geometry.dispose();
+            this.meshText1.material.dispose();
+            this.meshText2.material.dispose();
+            this.remove(this.meshText1);
+            this.remove(this.meshText2);
+        }
     }
 
     _createClockDisplayText() {
         const timeString = this._getTimeString(this._lastDate);
-        const material = new THREE.MeshNormalMaterial();
-        const geometry = new THREE.TextGeometry(timeString, {
+        const geometryText = new THREE.TextGeometry(timeString, {
             font: ClockDisplay.font,
             size: 1.2,
             height: 0.5,
@@ -51,25 +58,24 @@ export class ClockDisplay extends THREE.Object3D {
             bevelSegments: 5
         });
 
-        geometry.computeBoundingBox();
-        const centerOffsetX = -0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x);
-        const centerOffsetY = -0.5 * (geometry.boundingBox.max.y - geometry.boundingBox.min.y);
+        geometryText.computeBoundingBox();
+        const centerOffsetX = -0.5 * (geometryText.boundingBox.max.x - geometryText.boundingBox.min.x);
+        const centerOffsetY = -0.5 * (geometryText.boundingBox.max.y - geometryText.boundingBox.min.y);
 
-        this._mesh1 = new THREE.Mesh(geometry, material);
-        this._mesh2 = this._mesh1.clone();
+        this.meshText1 = new THREE.Mesh(geometryText, ClockDisplay.materialText);
+        this.meshText2 = this.meshText1.clone();
 
-        this._mesh1.position.x = centerOffsetX;
-        this._mesh1.position.y = centerOffsetY;
-        this._mesh1.position.z = 0.01;
+        this.meshText1.position.x = centerOffsetX;
+        this.meshText1.position.y = centerOffsetY;
+        this.meshText1.position.z = 0.01;
 
+        this.meshText2.rotation.y = Math.PI;
+        this.meshText2.position.x = -centerOffsetX;
+        this.meshText2.position.y = centerOffsetY;
+        this.meshText2.position.z = -0.01;
 
-        this._mesh2.rotation.y = Math.PI;
-        this._mesh2.position.x = -centerOffsetX;
-        this._mesh2.position.y = centerOffsetY;
-        this._mesh2.position.z = -0.01;
-
-        this.add(this._mesh1);
-        this.add(this._mesh2);
+        this.add(this.meshText1);
+        this.add(this.meshText2);
     }
 
     _getTimeString(date) {

@@ -1,20 +1,22 @@
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 
 export class ClockHand extends THREE.Object3D {
-    constructor(clockMechanism, radius, sphereRadius, numOfSpheres, numOfActiveSpheres) {
+    static materialSphereActive = new THREE.MeshNormalMaterial();
+    static materialSphereInactive = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+
+    static geometrySphere = new THREE.SphereGeometry(0.5, 32, 32);
+
+    constructor(clockMechanism, radius, numOfSpheres, numOfActiveSpheres) {
         super();
         this.rotation.set(0, 0, 0);
         this._spheres = []
         this._r = radius;
-        this._sphereRadius = sphereRadius;
 
-        this._materialActive = new THREE.MeshNormalMaterial();
-        this._materialInactive = new THREE.MeshLambertMaterial({ color: 0xcccccc });
         for (let i = 0; i < numOfSpheres; i++) {
-            if (i > numOfActiveSpheres) {
-                this._spheres[i] = this._buildSphere(this._materialInactive, i, numOfSpheres);
+            if (i <= numOfActiveSpheres) {
+                this._spheres[i] = this._buildSphere(ClockHand.materialSphereActive, i, numOfSpheres);
             } else {
-                this._spheres[i] = this._buildSphere(this._materialActive, i, numOfSpheres);
+                this._spheres[i] = this._buildSphere(ClockHand.materialSphereInactive, i, numOfSpheres);
             }
             this.add(this._spheres[i]);
         }
@@ -23,8 +25,7 @@ export class ClockHand extends THREE.Object3D {
     }
 
     _buildSphere(material, positionId, numOfSpheres) {
-        const geometry = new THREE.SphereGeometry(this._sphereRadius, 32, 32);
-        const sphere = new THREE.Mesh(geometry, material);
+        const sphere = new THREE.Mesh(ClockHand.geometrySphere, material);
         const spherePosition = this._calculateSpherePosition(positionId, numOfSpheres);
         sphere.position.set(spherePosition.x, spherePosition.y, spherePosition.z);
         return sphere;
@@ -40,10 +41,11 @@ export class ClockHand extends THREE.Object3D {
 
     _activateSpheres(count) {
         for (let i = 0; i < this._spheres.length; i++) {
-            if (i < count) {
-                this._spheres[i].material = this._materialActive;
+            this._spheres[i].material.dispose();
+            if (i <= count) {
+                this._spheres[i].material = ClockHand.materialSphereActive;
             } else {
-                this._spheres[i].material = this._materialInactive;
+                this._spheres[i].material = ClockHand.materialSphereInactive;
             }
         }
     }

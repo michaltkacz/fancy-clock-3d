@@ -28,7 +28,7 @@ export class SceneManager {
         const zNear = 1;
         const zFar = 1000;
         const camera = new THREE.PerspectiveCamera(fov, aspectRatio, zNear, zFar);
-        camera.position.set(0, 0, 25);
+        camera.position.set(0, 0, -25);
         camera.lookAt(0, 0, 0);
         return camera;
     }
@@ -66,6 +66,8 @@ export class SceneManager {
     update() {
         this._cameraControls.update();
         this._sceneObjects["clock"].update();
+        //console.log(this._renderer.info);
+        this._renderer.renderLists.dispose();
     }
 
     render() {

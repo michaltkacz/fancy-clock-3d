@@ -1,10 +1,16 @@
 // --- PROGRAM ENTRY ---
 import { SceneManager } from './sceneManager.js';
+import Stats from '../node_modules/stats.js/src/Stats.js';
 
 // Get canvas html element
+const container = document.getElementById("container");
 const canvas = document.getElementById("canvas");
 // Create scene manager
 const sceneManager = new SceneManager(canvas);
+// Create stats
+const stats = new Stats();
+container.appendChild(stats.dom);
+
 
 // All event bindings in this function
 bindEventListeners();
@@ -14,13 +20,9 @@ updateAndRenderScene();
 
 
 // --- Functions ---
-function loadFont() {
-
-    return font;
-}
-
 function updateAndRenderScene() {
     requestAnimationFrame(updateAndRenderScene);
+    stats.update();
     sceneManager.update();
     sceneManager.render();
 }
