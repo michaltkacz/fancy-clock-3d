@@ -1,16 +1,19 @@
 // import * as THREE from '../node_modules/three/build/three.module.js';
 // import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
+// import { EffectComposer } from '../node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
+// import { RenderPass } from '../node_modules/three/examples/jsm/postprocessing/RenderPass.js';
+// import { UnrealBloomPass } from '../node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 import * as THREE from 'https://threejs.org/build/three.module.js';
 import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'https://threejs.org/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://threejs.org/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://threejs.org/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 import { Axes } from './objects/axes.js';
 import { Plane } from './objects/plane.js';
 import { Clock } from './objects/clock/clock.js';
 import { AmbientLight } from './objects/lights/ambientLight.js';
-import { EffectComposer } from '../node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from '../node_modules/three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from '../node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 export class SceneManager {
     constructor(canvas) {
