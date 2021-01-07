@@ -1,6 +1,7 @@
 // --- PROGRAM ENTRY ---
+// import Stats from '../node_modules/stats.js/src/Stats.js';
+import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js';
 import { SceneManager } from './sceneManager.js';
-import Stats from '../node_modules/stats.js/src/Stats.js';
 
 // Get canvas html element
 const container = document.getElementById("container");

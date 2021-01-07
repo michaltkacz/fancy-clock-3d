@@ -1,5 +1,9 @@
-import * as THREE from '../node_modules/three/build/three.module.js';
-import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
+// import * as THREE from '../node_modules/three/build/three.module.js';
+// import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
+
+import * as THREE from 'https://threejs.org/build/three.module.js';
+import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+
 import { Axes } from './objects/axes.js';
 import { Plane } from './objects/plane.js';
 import { Clock } from './objects/clock/clock.js';
@@ -24,7 +28,7 @@ export class SceneManager {
     // --- Pseudo private methods ---
     _buildScene() {
         const scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0x000000, 120, 200);
+        scene.fog = new THREE.Fog(0x000000, 150, 300);
         return scene;
     }
 
