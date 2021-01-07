@@ -5,7 +5,7 @@ export class ClockDisplay extends THREE.Object3D {
     static font = undefined;
     static loadFont() {
         const loader = new THREE.FontLoader();
-        loader.load('../../../node_modules/three/examples/fonts/helvetiker_bold.typeface.json', function(response) {
+        loader.load('https://threejs.org/examples/fonts/optimer_bold.typeface.json', function(response) {
             ClockDisplay.font = response;
         });
     }
