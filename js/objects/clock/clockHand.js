@@ -1,26 +1,60 @@
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 
 export class ClockHand extends THREE.Object3D {
-    static materialSphereActive = new THREE.MeshNormalMaterial();
-    static materialSphereInactive = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+    static materialsSphereActive = {
+        'bright': new THREE.MeshPhongMaterial({
+            color: 0xF148FB,
+            emissive: 0xF148FB,
+            emissiveIntensity: 5
+        }),
+        'medium': new THREE.MeshPhongMaterial({
+            color: 0x7122FA,
+            emissive: 0x7122FA,
+            emissiveIntensity: 5
+        }),
+        'dark': new THREE.MeshPhongMaterial({
+            color: 0x560A86,
+            emissive: 0x560A86,
+            emissiveIntensity: 15
+        })
+    }
 
-    static geometrySphere = new THREE.SphereGeometry(0.5, 32, 32);
+    static materialsSphereInactive = {
+        'bright': new THREE.MeshPhongMaterial({
+            color: 0xF148FB,
+            emissive: 0xF148FB,
+            emissiveIntensity: 0.1
+        }),
+        'medium': new THREE.MeshPhongMaterial({
+            color: 0x7122FA,
+            emissive: 0x7122FA,
+            emissiveIntensity: 0.1
+        }),
+        'dark': new THREE.MeshPhongMaterial({
+            color: 0x560A86,
+            emissive: 0x560A86,
+            emissiveIntensity: 0.1
+        })
+    }
 
-    constructor(clockMechanism, radius, numOfSpheres, numOfActiveSpheres) {
+    static geometrySphere = new THREE.SphereGeometry(1, 32, 32);
+
+    constructor(clockMechanism, radius, numOfSpheres, numOfActiveSpheres, color) {
         super();
         this.rotation.set(0, 0, 0);
         this._spheres = []
         this._r = radius;
+        this._color = color;
+        this._lastTime = numOfActiveSpheres;
 
         for (let i = 0; i < numOfSpheres; i++) {
             if (i <= numOfActiveSpheres) {
-                this._spheres[i] = this._buildSphere(ClockHand.materialSphereActive, i, numOfSpheres);
+                this._spheres[i] = this._buildSphere(ClockHand.materialsSphereActive[this._color], i, numOfSpheres);
             } else {
-                this._spheres[i] = this._buildSphere(ClockHand.materialSphereInactive, i, numOfSpheres);
+                this._spheres[i] = this._buildSphere(ClockHand.materialsSphereInactive[this._color], i, numOfSpheres);
             }
             this.add(this._spheres[i]);
         }
-
         clockMechanism.add(this);
     }
 
@@ -43,20 +77,21 @@ export class ClockHand extends THREE.Object3D {
         for (let i = 0; i < this._spheres.length; i++) {
             this._spheres[i].material.dispose();
             if (i <= count) {
-                this._spheres[i].material = ClockHand.materialSphereActive;
+                this._spheres[i].material = ClockHand.materialsSphereActive[this._color];
             } else {
-                this._spheres[i].material = ClockHand.materialSphereInactive;
+                this._spheres[i].material = ClockHand.materialsSphereInactive[this._color];
             }
         }
     }
 
     update(time, rotationAngles) {
-        if (time !== this._lastTime)
+        if (time !== this._lastTime) {
             this._activateSpheres(time);
+            this._lastTime = time;
+        }
+
         this.rotation.x += rotationAngles.x;
         this.rotation.y += rotationAngles.y;
         this.rotation.z += rotationAngles.z;
     }
-
-
 }

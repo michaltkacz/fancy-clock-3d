@@ -4,9 +4,9 @@ import { ClockHand } from './clockHand.js';
 export class ClockMechanism extends THREE.Object3D {
     constructor(clock, date) {
         super();
-        this._hoursClockHand = new ClockHand(this, 8, 24, date.getHours());
-        this._minutesClockHand = new ClockHand(this, 10, 60, date.getMinutes());
-        this._secondsClockHand = new ClockHand(this, 12, 60, date.getSeconds());
+        this._hoursClockHand = new ClockHand(this, 15, 24, date.getHours(), 'dark');
+        this._minutesClockHand = new ClockHand(this, 20, 60, date.getMinutes(), 'medium');
+        this._secondsClockHand = new ClockHand(this, 25, 60, date.getSeconds(), 'bright');
         this.rotation.z = Math.PI / 2;
         clock.add(this);
     }

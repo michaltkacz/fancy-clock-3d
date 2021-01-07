@@ -10,12 +10,25 @@ export class ClockDisplay extends THREE.Object3D {
     }
 
     static geometryCircle = new THREE.CircleGeometry(4.5, 32);
-    static materialCircle = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
+    static materialCircle = new THREE.MeshPhongMaterial({
+        color: 0x82E0BF,
+        emissive: 0x82E0BF,
+        emissiveIntensity: 0.5,
+        side: THREE.DoubleSide
+    });
 
     static geometryTorus = new THREE.TorusGeometry(4.5, 0.5, 16, 100);
-    static materialTorus = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    static materialTorus = new THREE.MeshPhongMaterial({
+        color: 0x82E0BF,
+        emissive: 0x82E0BF,
+        emissiveIntensity: 2
+    });
 
-    static materialText = new THREE.MeshNormalMaterial();
+    static materialText = new THREE.MeshPhongMaterial({
+        color: 0x120052,
+        emissive: 0x120052,
+        emissiveIntensity: 1
+    });
 
     constructor(clock, date) {
         super();
@@ -49,7 +62,7 @@ export class ClockDisplay extends THREE.Object3D {
         const geometryText = new THREE.TextGeometry(timeString, {
             font: ClockDisplay.font,
             size: 1.2,
-            height: 0.5,
+            height: 0.2,
             curveSegments: 12,
             bevelEnabled: false,
             bevelThickness: 10,
